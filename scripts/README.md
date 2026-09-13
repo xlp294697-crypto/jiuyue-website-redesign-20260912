@@ -35,3 +35,8 @@ python3 deploy_update.py \
 核对后恢复旧链接和配置，执行 `nginx -t`，成功后 reload Nginx，再检查首页、两个后台入口、健康接口和私有接口的访问控制。不要删除旧目录来回退，也不要覆盖数据库或后端文件。
 
 本地的安全单元测试可以在 Windows 运行。设置 `NGINX_BINARY` 为独立 Nginx 可执行文件路径，可额外运行真实 Nginx 路由测试；它只监听本机临时端口，不使用生产域名的服务器。
+# 预约页微信二维码增量更新
+
+`deploy_static_update.py` 用于从 2026-09-12 的已上线版本添加微信咨询区块。增量包包含 `booking/index.html`、`assets/production.css`、`assets/photos/wechat-contact.png` 与 `incremental-manifest.json`，其中记录来源仓库、基础提交、目标提交和三个文件的新旧 SHA-256。
+
+先用 `--inspect` 核对服务器当前版本，再提供 `--archive`、`--sha256`、`--expected-config`、`--expected-release` 执行。程序完整校验基础版本，复制新目录、应用增量并原子切换前端链接；保留旧版本和回退记录。此次不修改 Nginx 配置，不写入预约数据。此程序针对“尚无该二维码”的基础版本，后续再次修改须明确新的增量范围与基础版本，不能重复套用旧命令。
