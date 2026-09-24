@@ -1,0 +1,11 @@
+[Unit]
+Description=Check Jiuyue public main after each completed deployment run
+
+[Timer]
+OnBootSec=60s
+OnUnitInactiveSec=60s
+AccuracySec=5s
+Unit=jiuyue-static-pull.service
+
+[Install]
+WantedBy=timers.target
