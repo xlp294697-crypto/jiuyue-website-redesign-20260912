@@ -19,6 +19,8 @@ import xml.etree.ElementTree as ET
 
 
 ORIGIN = "https://jiuyue.club"
+EXPECTED_PHONE = "18961783803"
+EXPECTED_PHONE_DISPLAY = "189 6178 3803"
 SITEMAP_NAMESPACE = {"s": "http://www.sitemaps.org/schemas/sitemap/0.9"}
 PREVIEW_TEXT = (
     "设计预览", "网站设计原型", "不会发送或保存信息", "信息尚未提交",
@@ -262,10 +264,13 @@ def check(dist: Path):
         require(bool(organizations), f"{relative}: Organization is missing from JSON-LD.")
         for organization in organizations:
             require(organization.get("url") == ORIGIN + "/" and bool(organization.get("name")), f"{relative}: Organization needs its name and canonical website URL.")
+            require(organization.get("telephone") == "+86-" + EXPECTED_PHONE, f"{relative}: Organization telephone must use the current public number.")
         for kind, value, check_fragment in page.references:
             if not value:
                 errors.append(f"{relative}: empty {kind} URL.")
                 continue
+            if urlsplit(value).scheme == "tel":
+                require(value == "tel:" + EXPECTED_PHONE, f"{relative}: telephone link must use the current public number.")
             try:
                 resolved = local_reference(dist, page.url, value)
             except ValueError:
@@ -284,6 +289,9 @@ def check(dist: Path):
     for label, values in (("title", titles), ("description", descriptions)):
         duplicates = [value for value, count in Counter(values).items() if count > 1]
         require(not duplicates, f"Indexable pages have duplicate {label}s: {duplicates}")
+
+    home = pages.get("index.html")
+    require(home is not None and EXPECTED_PHONE_DISPLAY in home.raw, "index.html: current public phone display is missing.")
 
     for path in sorted(dist.rglob("*")):
         if path.suffix not in {".html", ".js", ".css"}:

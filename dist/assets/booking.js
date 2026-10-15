@@ -31,7 +31,7 @@
         response=await fetch('/api/inquiries',{method:'POST',credentials:'same-origin',headers:{'content-type':'application/json'},body:JSON.stringify(body),signal:controller.signal});
         data=await response.json();
       }catch{
-        throw new Error('网络连接异常或请求超时，预约可能已提交。请勿连续重复提交，可致电 180 6173 6378 确认。');
+        throw new Error('网络连接异常或请求超时，预约可能已提交。请勿连续重复提交，可致电 189 6178 3803 确认。');
       }
       if(!response.ok)throw new Error(data.error?.message||data.error||'提交失败，请稍后重试。');
       form.reset();
