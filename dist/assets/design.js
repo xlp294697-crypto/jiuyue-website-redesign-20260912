@@ -26,7 +26,7 @@ const filters=document.querySelectorAll('[data-filter]');
 filters.forEach(button=>button.addEventListener('click',()=>{const value=button.dataset.filter;filters.forEach(b=>b.setAttribute('aria-pressed',String(b===button)));document.querySelectorAll('[data-category]').forEach(card=>{card.hidden=value!=='all'&&card.dataset.category!==value;});const count=document.querySelectorAll('[data-category]:not([hidden])').length;const status=document.querySelector('#filter-status');if(status)status.textContent=`显示 ${count} 个课堂片段`; }));
 if(filters.length){const q=new URLSearchParams(location.search).get('course');[...filters].find(b=>b.dataset.filter===q)?.click();}
 
-document.querySelector('[data-copy-address]')?.addEventListener('click',async()=>{try{await navigator.clipboard.writeText('宜兴市宜城街道体育场2号门，具体集合点请预约确认');showToast('到店信息已复制。');}catch{showToast('请选中页面上的地址文字进行复制。');}});
+document.querySelector('[data-copy-address]')?.addEventListener('click',async()=>{try{await navigator.clipboard.writeText('到店参考：宜兴市宜城街道体育场2号门。预约时请确认本次上课地址、集合点和时间。');showToast('到店信息已复制。');}catch{showToast('请选中页面上的地址文字进行复制。');}});
 function showToast(message){let toast=document.querySelector('.toast');if(!toast){toast=document.createElement('div');toast.className='toast';toast.setAttribute('role','status');document.body.append(toast);}toast.textContent=message;toast.hidden=false;clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>toast.hidden=true,3500);}
 
 const imageDialog=document.querySelector('#image-dialog');

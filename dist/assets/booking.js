@@ -35,7 +35,7 @@
       }
       if(!response.ok)throw new Error(data.error?.message||data.error||'提交失败，请稍后重试。');
       form.reset();
-      status.textContent='预约已提交，我们会尽快与您电话联系，确认课程、体测和到店安排。';
+      status.textContent='预约已提交。我们会电话联系您，答复课程问题，并确认体测或到店安排。';
       analytics?.track('booking_success',{section:'booking'});
     }catch(error){status.textContent=error.message;status.classList.add('error');}
     finally{clearTimeout(timeout);submitting=false;submit.disabled=false;submit.textContent='提交预约　↗';status.focus();}
