@@ -16,7 +16,16 @@
 <div class="field"><label for="grade">孩子年级<span class="required">*</span></label><select id="grade" name="grade" required><option value="">请选择年级</option><option>幼儿园</option><option>小学</option><option>初一</option><option>初二</option><option>初三</option><option>高中及以上</option></select></div>
 <div class="form-row"><div class="field"><label for="parentName">家长称呼<span class="required">*</span></label><input id="parentName" name="parentName" autocomplete="off" maxlength="30" placeholder="例如：王女士" required></div><div class="field"><label for="phone">联系电话<span class="required">*</span></label><input id="phone" name="phone" type="tel" autocomplete="off" inputmode="tel" pattern="1[3-9][0-9]{9}" maxlength="11" placeholder="11 位手机号码" title="请输入11位中国大陆手机号码" required></div></div>
 <div class="field"><label for="concern">想咨询的问题</label><textarea id="concern" name="concern" maxlength="300" placeholder="例如：如何分组、课程时间或费用。请勿填写疾病诊断等敏感信息。"></textarea></div>
-<div class="field"><label for="preferredTime">方便联系的时间</label><select id="preferredTime" name="preferredTime"><option>工作日上午</option><option>工作日下午</option><option>工作日晚上</option><option>周末</option></select></div>
+<div class="field"><label for="preferredTime">方便联系的时间</label><select id="preferredTime" name="preferredTime">
+<option value="">请选择方便联系的时间（选填）</option>
+<optgroup label="周一"><option value="周一上午">周一上午</option><option value="周一下午">周一下午</option><option value="周一晚上">周一晚上</option></optgroup>
+<optgroup label="周二"><option value="周二上午">周二上午</option><option value="周二下午">周二下午</option><option value="周二晚上">周二晚上</option></optgroup>
+<optgroup label="周三"><option value="周三上午">周三上午</option><option value="周三下午">周三下午</option><option value="周三晚上">周三晚上</option></optgroup>
+<optgroup label="周四"><option value="周四上午">周四上午</option><option value="周四下午">周四下午</option><option value="周四晚上">周四晚上</option></optgroup>
+<optgroup label="周五"><option value="周五上午">周五上午</option><option value="周五下午">周五下午</option><option value="周五晚上">周五晚上</option></optgroup>
+<optgroup label="周六"><option value="周六上午">周六上午</option><option value="周六下午">周六下午</option><option value="周六晚上">周六晚上</option></optgroup>
+<optgroup label="周日"><option value="周日上午">周日上午</option><option value="周日下午">周日下午</option><option value="周日晚上">周日晚上</option></optgroup>
+</select></div>
 <label class="form-honeypot" aria-hidden="true">请勿填写<input name="website" tabindex="-1" autocomplete="off"></label>
 <label class="check-field"><input type="checkbox" required name="privacyConsent" value="yes"><span>我已阅读并同意<a href="/privacy/index.html">《预约信息处理告知》</a>，同意企业为本次预约和相关课程服务处理上述信息；涉及未成年人时，本人是其监护人或已获监护人授权。</span></label>
 <button class="btn" type="submit" id="booking-submit" disabled>提交预约　↗</button><noscript><p>请启用浏览器脚本以提交预约，或致电 189 6178 3803 咨询。</p></noscript><div class="form-status booking-status" id="form-status" role="status" tabindex="-1" hidden></div></form></section></main>
