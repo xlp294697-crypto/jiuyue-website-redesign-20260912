@@ -30,11 +30,28 @@ python -m http.server 8787 --bind 127.0.0.1 --directory dist
 
 ## 检查与发布
 
+### 轻盈玻璃界面
+
+全站沿用原有课程、课堂照片和文案，导航、筛选及咨询入口使用局部玻璃材质。样式集中在 `assets/production.css` 的轻盈玻璃分节，由 `body.liquid-glass-ui` 限定作用域；课堂筛选的移动高光由 `assets/design.js` 渐进增强。减少动态效果偏好、无背景模糊支持和高对比模式均有对应样式。
+
+服务器自动拉取器只接受初始化时登记的精确 `dist/` 文件集，因此本次复用既有资源路径；不要仅通过新增 CSS/JS 文件的方式绕过部署白名单。样式或脚本变化时，同时更新页面引用的版本参数，避免浏览器继续使用缓存。
+
+### 验证
+
 ```sh
 python tests/check_site.py
 node --test tests/booking.test.cjs tests/analytics.test.cjs tests/legacy-navigation.test.cjs
 python -m unittest discover -s tests -p "test_*.py"
 ```
+
+可用安装了 Playwright 与 Chromium 的环境运行浏览器回归。先启动上述本地预览，再运行：
+
+```powershell
+$env:GLASS_BASE_URL = 'http://127.0.0.1:8787'
+node tests/liquid-glass.browser.cjs
+```
+
+如果 Playwright 由宿主统一提供，可将 `PLAYWRIGHT_MODULE` 设为其模块目录。检查覆盖课堂深链筛选、换行后高光定位、减少动态效果、手机菜单键盘关闭及预约/微信入口；测试拦截 API 请求，不提交实际预约。
 
 发布程序及说明见 `scripts/`。仅从已提交并推送的干净版本生成前端发布包，先核对服务器当前配置摘要和前端版本，再切换；保留旧版本目录和配置备份供回退。Nginx 仅增加明确的前台资源路径，不覆盖 `/admin`、`/api/` 或原后台使用的静态资源。
 

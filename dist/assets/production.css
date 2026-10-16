@@ -10,3 +10,441 @@
 .privacy-article{max-width:800px}.privacy-article h2{font-size:27px;margin:36px 0 18px}.privacy-article p,.privacy-article li{font-size:16px;line-height:1.95;color:var(--muted);margin-top:15px}.privacy-article ul{padding-left:24px}.privacy-article .privacy-meta{font-size:13px}.privacy-article .notice{color:var(--deep)}.privacy-article .phone-link{color:var(--purple);text-decoration:underline}
 @media(max-width:900px){.coach-grid,.cert-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.analytics-consent{gap:18px;align-items:flex-start;flex-direction:column}.analytics-consent .actions{align-self:flex-end}}
 @media(max-width:640px){.analytics-consent{left:12px;right:12px;bottom:83px;padding:18px;gap:14px;border-radius:13px;max-height:calc(100dvh - 175px);overflow:auto}.analytics-consent strong{font-size:16px}.analytics-consent p{font-size:12px}.analytics-consent .actions{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:10px}.analytics-consent .btn{font-size:13px;padding:10px 12px}.coach-grid{grid-template-columns:1fr}.coach{padding:24px}.cert-grid{gap:13px}.cert-card button{padding:7px}.cert-card img{height:150px}.cert-card p{padding:12px;font-size:12px}.image-dialog .dialog-head h2{font-size:15px}.privacy-article h2{font-size:23px}.privacy-article p,.privacy-article li{font-size:15px}}
+
+/* Light glass theme. Opt in on the page body.
+   Content surfaces stay opaque. Existing visibility and dialog behavior remain
+   owned by design.css / production.css and the page scripts. */
+
+/* 1. Shared surfaces and motion */
+body.liquid-glass-ui {
+  --glass-line: rgba(111, 76, 164, .16);
+  --glass-highlight: rgba(255, 255, 255, .9);
+  --glass-shadow: 0 8px 28px rgba(56, 35, 71, .075);
+  --glass-ease: cubic-bezier(.22, 1.15, .36, 1);
+  --radius: 24px;
+  background: #fff;
+}
+
+.liquid-glass-ui #main {
+  background-image: radial-gradient(ellipse at 88% 12%, #eee4f9 0, #f7f2fc 28%, transparent 66%);
+  background-repeat: no-repeat;
+  background-size: 100% 680px;
+}
+
+.liquid-glass-ui .soft,
+.liquid-glass-ui .footer { background-color: #f8f6fb; }
+.liquid-glass-ui .hero-grid > *,
+.liquid-glass-ui .course-grid > *,
+.liquid-glass-ui .guide-grid > *,
+.liquid-glass-ui .header-row > * { min-width: 0; }
+
+/* 2. Floating navigation. The opaque base is also the no-blur fallback. */
+.liquid-glass-ui .header {
+  width: min(1320px, calc(100% - 32px));
+  height: 82px;
+  top: 12px;
+  margin: 14px auto 0;
+  background: #fcfaff;
+  border: 1px solid var(--glass-line);
+  border-radius: 26px;
+  box-shadow: inset 0 1px 0 var(--glass-highlight), var(--glass-shadow);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.liquid-glass-ui .header-row {
+  width: 100%;
+  padding-inline: 24px;
+  gap: 24px;
+}
+.liquid-glass-ui .nav { gap: 12px; }
+.liquid-glass-ui .nav a {
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+.liquid-glass-ui .nav a[aria-current="page"] {
+  background: #eee6f7;
+  box-shadow: inset 0 1px 0 #fff;
+}
+.liquid-glass-ui .nav a[aria-current="page"]::after {
+  height: 2px;
+  bottom: 6px;
+  left: 18px;
+  right: 18px;
+  border-radius: 2px;
+}
+.liquid-glass-ui .menu-toggle {
+  min-height: 44px;
+  min-width: 44px;
+  border-radius: 16px;
+  border-color: var(--glass-line);
+  background: #fff;
+  color: var(--deep);
+  box-shadow: inset 0 1px 0 var(--glass-highlight);
+}
+.liquid-glass-ui .menu-toggle[aria-expanded="true"] {
+  background: #eee6f7;
+  border-color: #bba5d3;
+}
+
+/* 3. Rounded controls with a small, interruptible press / release response. */
+.liquid-glass-ui .btn {
+  min-height: 50px;
+  border-radius: 999px;
+  border-color: rgba(73, 43, 109, .14);
+  background: linear-gradient(155deg, #8060b1, #6f4ca4 75%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .26), 0 5px 15px rgba(111, 76, 164, .13);
+  transition: transform 340ms var(--glass-ease), box-shadow 220ms ease, background-color 180ms ease, border-color 180ms ease;
+}
+.liquid-glass-ui .btn:hover { transform: none; }
+.liquid-glass-ui .btn.outline {
+  color: var(--deep);
+  border-color: rgba(111, 76, 164, .23);
+  background: linear-gradient(145deg, rgba(255, 255, 255, .86), rgba(243, 236, 251, .58));
+  box-shadow: inset 0 1px 0 #fff, 0 3px 12px rgba(56, 35, 71, .035);
+}
+.liquid-glass-ui .btn.white {
+  background: #fff;
+  color: var(--deep);
+  border-color: rgba(255, 255, 255, .85);
+  box-shadow: inset 0 1px 0 #fff, 0 5px 16px rgba(26, 15, 35, .1);
+}
+.liquid-glass-ui .location-card .btn.outline {
+  background: rgba(255, 255, 255, .08);
+  color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .14);
+}
+.liquid-glass-ui .btn:not(:disabled):active,
+.liquid-glass-ui .menu-toggle:active,
+.liquid-glass-ui .chip:active {
+  transform: scale(.97);
+  transition-duration: 120ms;
+}
+.liquid-glass-ui .btn:disabled {
+  transform: none;
+  box-shadow: none;
+}
+.liquid-glass-ui .text-link { min-height: 44px; }
+.liquid-glass-ui .dialog-close {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-color: var(--glass-line);
+  color: var(--deep);
+  background: #f8f4fc;
+}
+.liquid-glass-ui :is(a, button, input, select, textarea, summary):focus-visible {
+  outline: 3px solid var(--purple);
+  outline-offset: 4px;
+}
+
+/* 4. Air around the original headline and classroom photography. */
+.liquid-glass-ui .hero { padding-top: 62px; padding-bottom: 76px; }
+.liquid-glass-ui .hero h1 { font-weight: 700; }
+.liquid-glass-ui .hero-note { flex-wrap: wrap; row-gap: 8px; }
+.liquid-glass-ui .hero-image {
+  border-radius: 64px 28px 28px 28px;
+  box-shadow: 0 18px 46px rgba(56, 35, 71, .08);
+}
+.liquid-glass-ui .course-hero .hero-image { border-radius: 28px; }
+.liquid-glass-ui .image-side {
+  color: var(--deep);
+  background: #fcfaff;
+  border: 1px solid rgba(255, 255, 255, .86);
+  box-shadow: 0 4px 12px rgba(56, 35, 71, .06);
+}
+.liquid-glass-ui .photo-label {
+  border-radius: 24px;
+  background: #f7f0fc;
+  color: var(--deep);
+  border: 1px solid rgba(255, 255, 255, .9);
+  box-shadow: inset 0 1px 0 #fff, 0 10px 30px rgba(56, 35, 71, .11);
+}
+.liquid-glass-ui .photo-label small { color: #665071; }
+.liquid-glass-ui .round-link {
+  background: #eee4f8;
+  color: var(--purple);
+  border: 1px solid #fff;
+  box-shadow: inset 0 1px 0 #fff;
+}
+.liquid-glass-ui .hero-index { border-top-color: var(--glass-line); }
+.liquid-glass-ui .hero-index a { min-height: 44px; border-radius: 12px; }
+.liquid-glass-ui .page-intro { padding-block: 58px 54px; }
+.liquid-glass-ui .page-intro h1,
+.liquid-glass-ui .course-hero h1,
+.liquid-glass-ui .booking-copy h1 { font-weight: 700; }
+.liquid-glass-ui .editorial-photo { border-radius: 26px; }
+
+/* 5. Solid reading surfaces. No blur is applied to cards or body copy. */
+.liquid-glass-ui :is(.course-card, .guide-card, .video-card, .about-card, .coach, .cert-card) {
+  border-radius: 24px;
+  border-color: var(--glass-line);
+  background: #fff;
+  box-shadow: 0 5px 20px rgba(56, 35, 71, .035);
+  transition: transform 280ms var(--glass-ease), box-shadow 220ms ease, border-color 220ms ease;
+}
+.liquid-glass-ui .course-card:hover { transform: none; }
+.liquid-glass-ui :is(.mini-callout, .article-aside, .wechat-contact) {
+  background: #f6f2fa;
+  border-radius: 24px;
+}
+.liquid-glass-ui :is(.booking-card, .dialog, .analytics-consent) {
+  background: #fff;
+  border-color: var(--glass-line);
+  border-radius: 26px;
+  box-shadow: 0 14px 44px rgba(56, 35, 71, .09);
+}
+.liquid-glass-ui .dialog { box-shadow: 0 24px 80px rgba(30, 16, 43, .24); }
+.liquid-glass-ui :is(.compare-invite, .facts-grid, .visit-strip, .location-card) { border-radius: 24px; }
+.liquid-glass-ui .compare-invite { background: #eee7f7; }
+.liquid-glass-ui .pill { background: #efe6f8; border: 1px solid #e5d9f0; }
+.liquid-glass-ui .notice { border-radius: 0 18px 18px 0; }
+.liquid-glass-ui .video-play {
+  min-height: 44px;
+  align-items: center;
+  background: #fff;
+  border: 1px solid rgba(111, 76, 164, .12);
+  box-shadow: 0 4px 15px rgba(56, 35, 71, .08);
+}
+.liquid-glass-ui .field :is(input, select, textarea) {
+  border-radius: 14px;
+  background: #faf8fc;
+  border-color: #dcd2e7;
+}
+.liquid-glass-ui .field :is(input, select, textarea):focus { background: #fff; }
+.liquid-glass-ui .footer-links { gap: 4px; }
+.liquid-glass-ui .footer-links a,
+.liquid-glass-ui .footer-contact > a,
+.liquid-glass-ui .article-aside a:not(.btn),
+.liquid-glass-ui .compare-table a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.liquid-glass-ui .breadcrumb { align-items: center; }
+.liquid-glass-ui .breadcrumb a { min-height: 44px; display: inline-flex; align-items: center; }
+
+/* 6. Classroom filter. The selected button works before JS enhancement.
+   JS may position one indicator by the selected button's actual layout box. */
+.liquid-glass-ui .chips { position: relative; isolation: isolate; }
+.liquid-glass-ui .chip {
+  position: relative;
+  z-index: 1;
+  min-height: 46px;
+  max-width: 100%;
+  border-color: var(--glass-line);
+  background: rgba(255, 255, 255, .76);
+  color: var(--muted);
+  box-shadow: inset 0 1px 0 #fff;
+  transition: transform 300ms var(--glass-ease), color 180ms ease, background-color 180ms ease, border-color 180ms ease;
+}
+.liquid-glass-ui .chip[aria-pressed="true"] {
+  background: #eee4f8;
+  color: #5d378e;
+  border-color: #c4addd;
+  font-weight: 700;
+  box-shadow: inset 0 1px 0 #fff, 0 4px 13px rgba(111, 76, 164, .1);
+}
+.liquid-glass-ui .chips.glass-filter-ready > .glass-filter-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 999px;
+  background: #eee4f8;
+  border: 1px solid #c4addd;
+  box-shadow: inset 0 1px 0 #fff, 0 4px 13px rgba(111, 76, 164, .1);
+  transition: transform 400ms var(--glass-ease), width 400ms var(--glass-ease), height 400ms var(--glass-ease);
+}
+.liquid-glass-ui .chips.glass-filter-ready .chip[aria-pressed="true"] {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+.liquid-glass-ui .chips.glass-filter-ready > .glass-filter-indicator:not([data-positioned]) { transition: none; }
+
+/* Limit hover motion to devices with a real hover pointer. */
+@media (hover: hover) and (pointer: fine) {
+  .liquid-glass-ui .nav a:hover { background: #f0e9f7; color: var(--purple); }
+  .liquid-glass-ui .btn:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .3), 0 8px 20px rgba(111, 76, 164, .2);
+  }
+  .liquid-glass-ui .btn.outline:hover { background: #f0e8f8; border-color: #b69bce; }
+  .liquid-glass-ui .location-card .btn.outline:hover { background: rgba(255, 255, 255, .16); border-color: #fff; }
+  .liquid-glass-ui :is(.course-card, .guide-card):hover {
+    transform: translateY(-4px);
+    border-color: #c9b5df;
+    box-shadow: 0 12px 28px rgba(56, 35, 71, .085);
+  }
+  .liquid-glass-ui .chip:not([aria-pressed="true"]):hover { background: #f3ecfa; border-color: #cbb6df; }
+  .liquid-glass-ui .btn:not(:disabled):active { transform: scale(.97); }
+}
+
+/* 7. Responsive shell and thumb-sized controls. Visibility stays in base CSS. */
+@media (max-width: 1150px) {
+  .liquid-glass-ui .header-row { padding-inline: 18px; gap: 16px; }
+  .liquid-glass-ui .nav { gap: 4px; }
+  .liquid-glass-ui .nav a { padding-inline: 9px; }
+}
+@media (max-width: 900px) {
+  .liquid-glass-ui .header { width: calc(100% - 24px); height: 76px; top: 10px; margin-top: 10px; border-radius: 24px; }
+  .liquid-glass-ui .header-row { padding-inline: 16px; gap: 12px; }
+  .liquid-glass-ui .nav {
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    max-height: calc(100vh - 110px);
+    max-height: calc(100dvh - 110px);
+    overflow-y: auto;
+    padding: 10px;
+    border: 1px solid var(--glass-line);
+    border-radius: 24px;
+    background: #fcfaff;
+    box-shadow: inset 0 1px 0 #fff, 0 14px 32px rgba(56, 35, 71, .12);
+  }
+  .liquid-glass-ui .nav a { padding: 12px 16px; min-height: 48px; }
+  .liquid-glass-ui .hero { padding-top: 48px; }
+  .liquid-glass-ui .photo-label { border-radius: 22px; }
+}
+@media (max-width: 640px) {
+  .liquid-glass-ui .header { width: calc(100% - 20px); height: 70px; top: 8px; margin-top: 8px; border-radius: 22px; }
+  .liquid-glass-ui .header-row { padding-inline: 12px; gap: 7px; }
+  .liquid-glass-ui .header .brand { gap: 7px; }
+  .liquid-glass-ui .header .brand svg { width: 25px; height: 36px; }
+  .liquid-glass-ui .header .brand strong { font-size: 18px; letter-spacing: .04em; }
+  .liquid-glass-ui .header .brand small { font-size: 8px; letter-spacing: .12em; }
+  .liquid-glass-ui .header .btn { min-height: 44px; padding: 10px 11px; gap: 7px; font-size: 12px; white-space: nowrap; }
+  .liquid-glass-ui .menu-toggle { padding: 8px 10px; font-size: 12px; border-radius: 15px; }
+  .liquid-glass-ui .nav { border-radius: 22px; }
+  .liquid-glass-ui .hero { padding-top: 40px; padding-bottom: 48px; }
+  .liquid-glass-ui .hero-grid { gap: 34px; }
+  .liquid-glass-ui .hero h1 { font-size: clamp(34px, 10.3vw, 42px); }
+  .liquid-glass-ui .hero .actions { gap: 12px; }
+  .liquid-glass-ui .hero-note { column-gap: 16px; }
+  .liquid-glass-ui .hero-media { padding-left: 0; }
+  .liquid-glass-ui .hero-image { border-radius: 40px 24px 24px 24px; }
+  .liquid-glass-ui .photo-label { right: 12px; left: 8px; padding: 16px; gap: 12px; }
+  .liquid-glass-ui .photo-label strong { font-size: 15px; }
+  .liquid-glass-ui .photo-label small { font-size: 10px; }
+  .liquid-glass-ui .page-intro { padding-block: 32px 38px; }
+  .liquid-glass-ui .course-hero .hero-image { border-radius: 24px; }
+  .liquid-glass-ui :is(.course-card, .guide-card, .video-card, .about-card, .coach, .cert-card) { border-radius: 20px; }
+  .liquid-glass-ui .course-body { padding: 16px; }
+  .liquid-glass-ui :is(.booking-card, .dialog, .analytics-consent) { border-radius: 22px; }
+  .liquid-glass-ui .chip { min-height: 44px; padding: 9px 16px; }
+  .liquid-glass-ui .mobile-dock {
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    left: 12px;
+    right: 12px;
+    gap: 8px;
+    padding: 8px;
+    grid-template-columns: 1fr 1.35fr;
+    background: #fcfaff;
+    border: 1px solid var(--glass-line);
+    border-radius: 30px;
+    box-shadow: inset 0 1px 0 #fff, 0 8px 30px rgba(56, 35, 71, .15);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .liquid-glass-ui .mobile-dock a { min-width: 0; min-height: 46px; padding: 10px 12px; gap: 8px; font-size: 13px; }
+  .liquid-glass-ui .footer { padding-bottom: calc(106px + env(safe-area-inset-bottom, 0px)); }
+  .liquid-glass-ui .analytics-consent {
+    bottom: calc(90px + env(safe-area-inset-bottom, 0px));
+    max-height: calc(100vh - 190px - env(safe-area-inset-bottom, 0px));
+    max-height: calc(100dvh - 190px - env(safe-area-inset-bottom, 0px));
+    box-shadow: 0 12px 38px rgba(56, 35, 71, .16);
+  }
+  .liquid-glass-ui .analytics-consent .btn { min-height: 44px; }
+  .liquid-glass-ui .toast { bottom: calc(92px + env(safe-area-inset-bottom, 0px)); }
+}
+@media (max-width: 360px) {
+  .liquid-glass-ui .header-row { padding-inline: 10px; gap: 6px; }
+  .liquid-glass-ui .header .brand svg { width: 22px; }
+  .liquid-glass-ui .header .brand strong { font-size: 17px; }
+  .liquid-glass-ui .header .btn { padding-inline: 9px; gap: 5px; }
+  .liquid-glass-ui .course-body { padding: 14px; }
+  .liquid-glass-ui .course-card h3 { font-size: 20px; }
+  .liquid-glass-ui .mobile-dock { left: 10px; right: 10px; gap: 6px; }
+  .liquid-glass-ui .mobile-dock a { padding-inline: 8px; gap: 5px; font-size: 12px; }
+}
+
+/* 8. Blur is enhancement only, limited to small floating elements. */
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .liquid-glass-ui .header {
+    background: rgba(252, 250, 255, .84);
+    backdrop-filter: blur(16px) saturate(1.15);
+    -webkit-backdrop-filter: blur(16px) saturate(1.15);
+  }
+  .liquid-glass-ui .photo-label {
+    background: rgba(249, 244, 253, .93);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .liquid-glass-ui .chips.glass-filter-ready > .glass-filter-indicator {
+    background: rgba(235, 224, 248, .84);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  @media (max-width: 900px) {
+    .liquid-glass-ui .nav {
+      background: rgba(252, 250, 255, .96);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+  }
+  @media (max-width: 640px) {
+    .liquid-glass-ui .mobile-dock {
+      background: rgba(252, 250, 255, .88);
+      backdrop-filter: blur(16px) saturate(1.15);
+      -webkit-backdrop-filter: blur(16px) saturate(1.15);
+    }
+  }
+}
+
+/* 9. Respect accessibility settings without changing visibility rules. */
+@media (prefers-reduced-motion: reduce) {
+  .liquid-glass-ui *, .liquid-glass-ui *::before, .liquid-glass-ui *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+  .liquid-glass-ui :is(.btn, .chip, .menu-toggle, .course-card, .guide-card):is(:hover, :active) { transform: none !important; }
+}
+@media (forced-colors: active) {
+  .liquid-glass-ui #main { background-image: none; }
+  .liquid-glass-ui :is(.header, .nav, .mobile-dock, .photo-label, .image-side, .course-card, .guide-card, .video-card, .about-card, .coach, .cert-card, .booking-card, .dialog, .analytics-consent) {
+    background: Canvas;
+    color: CanvasText;
+    border-color: CanvasText;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .liquid-glass-ui :is(.btn, .menu-toggle, .dialog-close, .chip),
+  .liquid-glass-ui .btn.outline,
+  .liquid-glass-ui .btn.white,
+  .liquid-glass-ui .location-card .btn.outline {
+    background: ButtonFace;
+    color: ButtonText;
+    border: 1px solid ButtonText;
+    box-shadow: none;
+  }
+  .liquid-glass-ui .nav a[aria-current="page"],
+  .liquid-glass-ui .chip[aria-pressed="true"],
+  .liquid-glass-ui .chips.glass-filter-ready .chip[aria-pressed="true"] {
+    background: Highlight;
+    color: HighlightText;
+    border-color: Highlight;
+    forced-color-adjust: none;
+  }
+  .liquid-glass-ui .chips.glass-filter-ready > .glass-filter-indicator {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .liquid-glass-ui :is(a, button, input, select, textarea, summary):focus-visible { outline-color: Highlight; }
+}

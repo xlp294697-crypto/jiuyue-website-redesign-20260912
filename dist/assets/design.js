@@ -37,3 +37,33 @@ document.querySelectorAll('[data-image]').forEach(button=>button.addEventListene
   const img=imageDialog.querySelector('#credential-image');img.src=button.dataset.image;img.alt=title;
   imageDialog.showModal();
 }));
+
+/* Progressive enhancement: the existing classroom buttons own filtering and
+   accessibility; this decorative highlight follows them, including wrapped rows. */
+document.querySelectorAll('.liquid-glass-ui .chips').forEach(group=>{
+  const buttons=[...group.querySelectorAll('[data-filter]')];
+  if(buttons.length<2)return;
+  const indicator=document.createElement('span');
+  indicator.className='glass-filter-indicator';
+  indicator.setAttribute('aria-hidden','true');
+  group.append(indicator);
+  group.classList.add('glass-filter-ready');
+  let frame=0;
+  function positionIndicator(){
+    const selected=buttons.find(button=>button.getAttribute('aria-pressed')==='true');
+    if(!selected)return;
+    indicator.style.width=`${selected.offsetWidth}px`;
+    indicator.style.height=`${selected.offsetHeight}px`;
+    indicator.style.transform=`translate3d(${selected.offsetLeft}px,${selected.offsetTop}px,0)`;
+  }
+  function schedulePosition(){
+    if(frame)return;
+    frame=requestAnimationFrame(()=>{frame=0;positionIndicator();});
+  }
+  positionIndicator();
+  requestAnimationFrame(()=>indicator.setAttribute('data-positioned','true'));
+  group.addEventListener('click',event=>{if(event.target.closest('[data-filter]'))schedulePosition();});
+  if(typeof ResizeObserver!=='undefined')new ResizeObserver(schedulePosition).observe(group);
+  else window.addEventListener('resize',schedulePosition,{passive:true});
+  document.fonts?.ready.then(schedulePosition);
+});
