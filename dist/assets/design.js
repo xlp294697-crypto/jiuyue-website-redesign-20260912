@@ -30,13 +30,71 @@ document.querySelector('[data-copy-address]')?.addEventListener('click',async()=
 function showToast(message){let toast=document.querySelector('.toast');if(!toast){toast=document.createElement('div');toast.className='toast';toast.setAttribute('role','status');document.body.append(toast);}toast.textContent=message;toast.hidden=false;clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>toast.hidden=true,3500);}
 
 const imageDialog=document.querySelector('#image-dialog');
-document.querySelectorAll('[data-image]').forEach(button=>button.addEventListener('click',()=>{
+function openPublicImage(source,title){
   if(!imageDialog)return;
-  const title=button.dataset.title||'公开资质资料';
   imageDialog.querySelector('#image-title').textContent=title;
-  const img=imageDialog.querySelector('#credential-image');img.src=button.dataset.image;img.alt=title;
+  const img=imageDialog.querySelector('#credential-image');img.src=source;img.alt=title;
   imageDialog.showModal();
-}));
+}
+document.querySelectorAll('[data-image]').forEach(button=>button.addEventListener('click',()=>openPublicImage(button.dataset.image,button.dataset.title||'公开资质资料')));
+
+/* This public competition is maintained in the existing school showcase backend.
+   The static result remains readable when the API or photos are unavailable. */
+const competitionShowcaseId='6029204f-d3d6-4b84-8546-f50cbba3272f';
+const competitionPhotoLabels={
+  '4ee7d0de-1e55-4f09-bdbc-87de4d71749f':'双冠军队合照',
+  '033100e9-7e8f-4423-a89c-8cd1fa6d85ec':'赛后纪念合照',
+  '1cf527f4-1f68-47c2-b29b-ea488c799d5e':'花球庆祝合影',
+  '89a8d209-e7e6-4cbc-ad3e-abe704434b70':'冠军奖杯与证书'
+};
+function competitionPhotos(payload){
+  const item=payload?.data;
+  if(!item||item.id!==competitionShowcaseId||item.type!=='competition'||item.status!=='published'
+    ||item.competitionName!=='2026年全国啦啦操联赛（无锡站）'||item.eventDate!=='2026-11-01'||!Array.isArray(item.images))return [];
+  const photos=[];
+  for(const image of item.images){
+    if(typeof image?.url!=='string')continue;
+    try{
+      const url=new URL(image.url,location.origin);
+      if(url.origin!==location.origin||url.username||url.password||url.search||url.hash
+        ||!/^\/school\/api\/v1\/public\/showcase-media\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(url.pathname))continue;
+      if(!photos.includes(url.pathname))photos.push(url.pathname);
+      if(photos.length===9)break;
+    }catch{ /* Invalid URLs never become DOM attributes. */ }
+  }
+  return photos;
+}
+async function loadCompetitionGallery(){
+  const gallery=document.querySelector('#competition-gallery');
+  if(!gallery)return;
+  const status=document.querySelector('#competition-gallery-status');
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),8000);
+  try{
+    const response=await fetch(`/school/api/v1/public/showcases/${competitionShowcaseId}`,{
+      credentials:'omit',redirect:'error',headers:{Accept:'application/json'},signal:controller.signal
+    });
+    if(!response.ok)throw new Error('showcase_unavailable');
+    const photos=competitionPhotos(await response.json());
+    if(!photos.length)throw new Error('showcase_photos_unavailable');
+    const cards=photos.map((source,index)=>{
+      const label=competitionPhotoLabels[source.split('/').pop()]||`赛事照片 ${index+1}`;
+      const title=`2026年全国啦啦操联赛（无锡站）· ${label}`;
+      const card=document.createElement('article');card.className='cert-card';
+      const button=document.createElement('button');button.type='button';button.setAttribute('aria-label',`放大查看：${title}`);
+      const image=document.createElement('img');image.src=source;image.alt=title;
+      image.width=960;image.height=720;image.loading='lazy';image.decoding='async';
+      button.append(image);button.addEventListener('click',()=>openPublicImage(source,title));
+      const caption=document.createElement('p');caption.textContent=`${label} · 点击查看大图`;
+      card.append(button,caption);return card;
+    });
+    gallery.replaceChildren(...cards);
+    if(status)status.textContent=`${photos.length} 张赛场照片，点击可放大查看。`;
+  }catch{
+    if(status)status.textContent='赛场照片暂时无法加载，请稍后刷新。';
+  }finally{clearTimeout(timeout);}
+}
+loadCompetitionGallery();
 
 /* Progressive enhancement: the existing classroom buttons own filtering and
    accessibility; this decorative highlight follows them, including wrapped rows. */
